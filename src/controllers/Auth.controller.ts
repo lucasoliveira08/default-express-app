@@ -1,8 +1,10 @@
 import { Router } from "express";
+import AuthService from "../services/Auth.service";
 
-class Auth {
+class AuthController {
   private route = Router();
   private defaultURL = "/auth";
+  private service = new AuthService();
 
   constructor() {
     this.get();
@@ -59,4 +61,4 @@ class Auth {
   }
 }
 
-export default new Auth().getRouter();
+export default new AuthController().getRouter();
