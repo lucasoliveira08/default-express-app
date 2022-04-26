@@ -5,8 +5,8 @@ import hpp = require("hpp");
 // import xss = require("xss-clean");
 import helmet from "helmet";
 import cookieParser = require("cookie-parser");
-import { Sanitize } from "./utils/functions/sanitize";
-import AuthController from "./controllers/Auth.controller";
+import { Sanitize } from "../utils/functions/sanitize";
+import AuthController from "../controllers/Auth.controller";
 
 class App {
   public app: express.Application;

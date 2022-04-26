@@ -1,6 +1,6 @@
-import App from "./App";
+import App from "./config/App";
 import * as dotenv from "dotenv";
-import AppClusterService from "./Cluster";
+import AppClusterService from "./config/Cluster";
 
 dotenv.config();
 AppClusterService.clusterize(new App());
