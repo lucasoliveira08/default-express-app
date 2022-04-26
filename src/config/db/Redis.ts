@@ -1,19 +1,20 @@
 import { createClient, RedisClientType } from "redis";
+import "dotenv/config";
 
 class Redis {
   private client: RedisClientType;
 
   constructor() {
     this.client = createClient({
-      url: process.env.REDIS_URL,
+      url: `redis://${process.env.REDIS_URL}`,
       password: process.env.REDIS_PASSWORD,
     });
 
     this.connect();
   }
 
-  public async set(key: string, value: string): Promise<void> {
-    await this.getClient().set(key, value);
+  public async set(key: string, value: string, ttl?: number): Promise<void> {
+    await this.getClient().set(key, value, { EX: ttl || 60 }); // 60 seconds
   }
 
   public async get(key: string): Promise<any> {
@@ -42,6 +43,8 @@ class Redis {
 
   private async connect(): Promise<void> {
     await this.getClient().connect();
+
+    console.log("Redis connected");
   }
 
   private getClient(): RedisClientType {
