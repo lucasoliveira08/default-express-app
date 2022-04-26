@@ -6,6 +6,7 @@ import hpp = require("hpp");
 import helmet from "helmet";
 import cookieParser = require("cookie-parser");
 import { Sanitize } from "./utils/functions/sanitize";
+import AuthController from "./controllers/Auth.controller";
 
 class App {
   public app: express.Application;
@@ -18,6 +19,13 @@ class App {
     this.config();
     this.securityConfig();
     this.configureCustomMiddlewares();
+    this.configRoutes();
+  }
+
+  private configRoutes(): void {
+    console.log("Configuring routes...");
+
+    this.app.use(AuthController);
   }
 
   private configureCors(): void {
@@ -25,12 +33,13 @@ class App {
 
     this.app.use(
       cors({
-        origin: (origin, callback) => {
-          if (!origin || !(this.corsWhitelist.indexOf(origin) !== -1))
-            return callback(new Error("Not allowed by CORS"));
+        // origin: (origin, callback) => {
+        //   if (!origin || !(this.corsWhitelist.indexOf(origin) !== -1))
+        //     return callback(new Error("Not allowed by CORS"));
 
-          callback(null, true);
-        },
+        //   callback(null, true);
+        // },
+        origin: "*",
         credentials: true,
         allowedHeaders: "Content-Type, Accept, Origin, Timestamp",
         preflightContinue: false,

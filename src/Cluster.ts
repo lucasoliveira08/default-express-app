@@ -1,5 +1,6 @@
 import * as cluster from "cluster";
 import * as os from "os";
+import App from "./App";
 
 const numCPUs = process.env.CPUS_TO_USE || os.cpus().length;
 console.log("NUM CPUS", numCPUs);
@@ -28,10 +29,10 @@ class AppClusterService {
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
-  public static clusterize(callback: Function): void {
+  public static clusterize(APP: App): void {
     if (this.isMaster()) return this.masterProcess();
 
-    return callback();
+    APP.start();
   }
 }
 

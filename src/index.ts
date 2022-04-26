@@ -1,4 +1,6 @@
 import App from "./App";
+import * as dotenv from "dotenv";
 import AppClusterService from "./Cluster";
 
-AppClusterService.clusterize(() => new App().start);
+dotenv.config();
+AppClusterService.clusterize(new App());

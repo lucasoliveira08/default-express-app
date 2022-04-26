@@ -1,13 +1,21 @@
-import xss from "xss";
+import * as xss from "xss";
+
+function isValidType(type: string): boolean {
+  return ["function", "symbol", "boolean", "undefined"].indexOf(type) !== -1;
+}
 
 export const Sanitize = (object: any): any => {
   try {
+    if (isValidType(typeof object)) return;
+
     Object.keys(object).forEach(function (key) {
       if (object[key] && typeof object[key] === "object") {
         return Sanitize(object[key]);
       }
 
-      object[key] = xss(object[key], {});
+      if (typeof object[key] === "string") {
+        object[key] = xss.filterXSS(object[key], {});
+      }
     });
 
     return object;
