@@ -1,8 +1,8 @@
 import express = require("express");
-import bodyParser from "body-parser";
-import cors from "cors";
-import hpp from "hpp";
-import xss from "xss-clean";
+import bodyParser = require("body-parser");
+import cors = require("cors");
+import hpp = require("hpp");
+// import xss = require("xss-clean");
 import helmet from "helmet";
 import cookieParser = require("cookie-parser");
 import { Sanitize } from "./utils/functions/sanitize";
@@ -39,7 +39,7 @@ class App {
     );
   }
 
-  private config(): void {
+  private async config(): Promise<void> {
     console.log("Configuring server...");
 
     this.configureCors();
@@ -53,7 +53,7 @@ class App {
 
     this.app.use(helmet());
     this.app.use(hpp());
-    this.app.use(xss());
+    // this.app.use(xss());
   }
 
   public start(): void {

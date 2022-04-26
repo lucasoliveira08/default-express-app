@@ -1,44 +1,17 @@
-import sanitizeHtml from "sanitize-html";
+import xss from "xss";
 
-function iterAll(object: any) {
-  Object.keys(object).forEach(function (key) {
-    if (
-      typeof object[key] === "boolean" ||
-      typeof object[key] === "undefined" ||
-      typeof object[key] === "function" ||
-      typeof object[key] === "symbol"
-    ) {
-      return;
-    }
+export const Sanitize = (object: any): any => {
+  try {
+    Object.keys(object).forEach(function (key) {
+      if (object[key] && typeof object[key] === "object") {
+        return Sanitize(object[key]);
+      }
 
-    if (object[key] && typeof object[key] === "object") {
-      iterAll(object[key]);
-      return;
-    }
-    const verifyIfIsNumber =
-      typeof object[key] === "string" ? false : !Number.isNaN(object[key]);
-
-    object[key] = sanitizeHtml(object[key], {
-      allowedTags: [],
-      allowedAttributes: {},
+      object[key] = xss(object[key], {});
     });
 
-    if (verifyIfIsNumber) {
-      try {
-        object[key] = Number(object[key]);
-      } catch (error) {
-        console.log("Error", error);
-      }
-    }
-  });
-}
-
-export const Sanitize = (value: any) =>
-  new Promise((resolve, reject) => {
-    try {
-      iterAll(value);
-      resolve(value);
-    } catch (error) {
-      throw new Error("Validation failed - " + error);
-    }
-  });
+    return object;
+  } catch (error) {
+    throw new Error("Validation failed - " + error);
+  }
+};
