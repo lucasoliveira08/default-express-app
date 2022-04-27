@@ -13,4 +13,5 @@ class Mongo {
   }
 }
 
-export default new Mongo();
+// export default new Mongo();
+export default Mongo;

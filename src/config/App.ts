@@ -8,6 +8,7 @@ import cookieParser = require("cookie-parser");
 import { Sanitize } from "../utils/functions/sanitize";
 import AuthController from "../controllers/Auth.controller";
 import SessionController from "../controllers/Session.controller";
+import Mongo from "./db/Mongo";
 
 class App {
   public app: express.Application;
@@ -18,9 +19,16 @@ class App {
 
     this.app = express();
     this.config();
+    this.connectDatabases();
     this.securityConfig();
     this.configureCustomMiddlewares();
     this.configRoutes();
+  }
+
+  private connectDatabases(): void {
+    console.log("Connecting to databases...");
+
+    new Mongo();
   }
 
   private configRoutes(): void {
