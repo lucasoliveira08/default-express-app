@@ -1,7 +1,10 @@
 import * as passport from "passport";
 import { Strategy } from "passport-local";
 
-const users: { email: string; password: string }[] = [];
+const users: {
+  email: string;
+  password: string;
+}[] = [];
 
 passport.use(
   "signup",
@@ -12,6 +15,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
+        console.log("GGGGGGGGG");
         await users.push({ email, password });
 
         return done(null, { email, password });
@@ -31,7 +35,6 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        console.log(users);
         const user = await users.find((u) => u.email === email);
 
         if (!user) {
