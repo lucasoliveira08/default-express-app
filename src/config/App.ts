@@ -7,6 +7,7 @@ import helmet from "helmet";
 import cookieParser = require("cookie-parser");
 import { Sanitize } from "../utils/functions/sanitize";
 import AuthController from "../controllers/Auth.controller";
+import SessionController from "../controllers/Session.controller";
 
 class App {
   public app: express.Application;
@@ -26,6 +27,7 @@ class App {
     console.log("Configuring routes...");
 
     this.app.use(AuthController);
+    this.app.use(SessionController);
   }
 
   private configureCors(): void {
