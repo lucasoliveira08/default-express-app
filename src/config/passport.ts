@@ -1,56 +1,42 @@
 import * as passport from "passport";
 import { Strategy } from "passport-local";
+import { UserMongo } from "../repositories/User.repository";
 
-const users: {
-  email: string;
-  password: string;
-}[] = [];
+const userFields = {
+  usernameField: "email",
+  passwordField: "password",
+};
 
 passport.use(
   "signup",
-  new Strategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-    },
-    async (email, password, done) => {
-      try {
-        console.log("GGGGGGGGG");
-        await users.push({ email, password });
+  new Strategy(userFields, async (email, password, done) => {
+    try {
+      await UserMongo.create({
+        email,
+        password,
+      });
 
-        return done(null, { email, password });
-      } catch (error) {
-        done(error);
-      }
+      return done(null, { email, password });
+    } catch (error) {
+      done(error);
     }
-  )
+  })
 );
 
 passport.use(
   "sign",
-  new Strategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-    },
-    async (email, password, done) => {
-      try {
-        const user = await users.find((u) => u.email === email);
+  new Strategy(userFields, async (email, password, done) => {
+    try {
+      const user = await UserMongo.findOne({
+        email,
+      });
 
-        if (!user) {
-          return done(null, false, { message: "User not found" });
-        }
+      if (!(await user.compareHash(password)))
+        return done(null, false, { message: "Wrong Password" });
 
-        // const validate = await user.isValidPassword(password);
-
-        // if (!validate) {
-        //   return done(null, false, { message: "Wrong Password" });
-        // }
-
-        return done(null, user, { message: "Logged in Successfully" });
-      } catch (error) {
-        return done(error);
-      }
+      return done(null, user, { message: "Logged in Successfully" });
+    } catch (error) {
+      return done(error);
     }
-  )
+  })
 );

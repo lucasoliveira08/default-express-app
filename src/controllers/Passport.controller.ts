@@ -12,8 +12,8 @@ class PassportController {
         req.login(user, { session: false }, async (error) => {
           if (error) return next(error);
 
-          const body = { _id: 123, email: user.email };
-          const token = jwt.sign({ user: body }, process.env.JWT_TOKEN, {
+          const body = { id: user.id, email: user.email };
+          const token = jwt.sign(body, process.env.JWT_TOKEN, {
             expiresIn: "1h",
             algorithm: "HS256",
           });

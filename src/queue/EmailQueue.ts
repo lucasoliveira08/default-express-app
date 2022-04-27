@@ -1,5 +1,5 @@
 import Queue = require("bull");
-import QUEUE_CONFIG from "./config";
+import QUEUE_CONFIG from "../config/queue.config";
 import QueueUtils from "./UtilsQueue";
 
 class EmailQueue extends QueueUtils {

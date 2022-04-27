@@ -1,9 +1,17 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 
 const HASH_POWER = 14;
 
-const Schema = mongoose.Schema;
+export const Schema = mongoose.Schema;
+
+export interface IUser {
+  id: string;
+  _id: string;
+  email: string;
+  password: string;
+  compareHash(hash: string): Promise<boolean>;
+}
 
 const UserSchema = new Schema({
   email: {
@@ -39,4 +47,6 @@ UserSchema.methods.compareHash = async function (
   return await bcrypt.compareSync(hash, this.password);
 };
 
-export default mongoose.model("user", UserSchema);
+const UserModel = mongoose.model("user", UserSchema);
+
+export default UserModel;
