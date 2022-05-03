@@ -1,6 +1,6 @@
 import * as passport from "passport";
 import { Strategy } from "passport-local";
-import { UserMongo } from "../repositories/User.repository";
+import { UserMongo, UserPostgre } from "../repositories/User.repository";
 
 const userFields = {
   usernameField: "email",
@@ -11,7 +11,12 @@ passport.use(
   "signup",
   new Strategy(userFields, async (email, password, done) => {
     try {
-      await UserMongo.create({
+      // await UserMongo.create({
+      //   email,
+      //   password,
+      // });
+
+      await UserPostgre.create({
         email,
         password,
       });

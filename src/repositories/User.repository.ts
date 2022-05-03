@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+import prisma from "../config/db/Postgre";
 import UserModel, { IUser } from "../models/User/User.model";
 
 export interface ICreateUser {
@@ -36,14 +38,22 @@ class UserMongoRepository {
 
 export const UserMongo = new UserMongoRepository();
 
-// class UserPostgreRepository {
-//   mongoModel = UserModel;
+class UserPostgreRepository {
+  public async create(data: ICreateUser): Promise<User> {
+    return await prisma.user.create({
+      data: {
+        ...data,
+      },
+    });
+  }
 
-//   public async create(data: IUser) {
-//     return await this.mongoModel.create({
-//       ...data,
-//     });
-//   }
-// }
+  public async findOne(data: IFindUser): Promise<User> {
+    return await prisma.user.findFirst({
+      where: {
+        ...data,
+      },
+    });
+  }
+}
 
-// export const UserPostgre = new UserPostgreRepository();
+export const UserPostgre = new UserPostgreRepository();
