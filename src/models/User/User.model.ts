@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcrypt";
 
-const HASH_POWER = 14;
+export const HASH_POWER = 14;
 
 export const Schema = mongoose.Schema;
 

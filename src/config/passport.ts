@@ -1,6 +1,7 @@
 import * as passport from "passport";
 import { Strategy } from "passport-local";
 import { UserMongo, UserPostgre } from "../repositories/User.repository";
+import * as bcrypt from "bcrypt";
 
 const userFields = {
   usernameField: "email",
@@ -32,11 +33,18 @@ passport.use(
   "sign",
   new Strategy(userFields, async (email, password, done) => {
     try {
-      const user = await UserMongo.findOne({
+      // const user = await UserMongo.findOne({
+      //   email,
+      // });
+
+      // if (!(await user.compareHash(password)))
+      //   return done(null, false, { message: "Wrong Password" });
+
+      const user = await UserPostgre.findOne({
         email,
       });
 
-      if (!(await user.compareHash(password)))
+      if (!bcrypt.compareSync(password, user.password))
         return done(null, false, { message: "Wrong Password" });
 
       return done(null, user, { message: "Logged in Successfully" });

@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import prisma from "../config/db/Postgre";
-import UserModel, { IUser } from "../models/User/User.model";
+import UserModel, { HASH_POWER, IUser } from "../models/User/User.model";
+import * as bcrypt from "bcrypt";
 
 export interface ICreateUser {
   email: string;
@@ -43,6 +44,7 @@ class UserPostgreRepository {
     return await prisma.user.create({
       data: {
         ...data,
+        password: await bcrypt.hash(data.password, HASH_POWER),
       },
     });
   }
