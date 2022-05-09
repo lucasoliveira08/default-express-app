@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import prisma from "../config/db/Postgre";
 import UserModel, { HASH_POWER, IUser } from "../models/User/User.model";
 import * as bcrypt from "bcrypt";
+import { Role } from "../utils/enums/Roles.enum";
 
 export interface ICreateUser {
   email: string;

@@ -1,35 +1,24 @@
-import { Router } from "express";
+import { Request, Response } from "express";
 import AuthService from "../services/Auth.service";
+import { Public } from "../utils/decorators/Public.decorator";
+import { Roles } from "../utils/decorators/Roles.decorator";
+import { Role } from "../utils/enums/Roles.enum";
 import PassportController from "./Passport.controller";
 
 class SessionController {
-  private route = Router();
-  private defaultURL = "/session";
-  private service = new AuthService();
+  service = new AuthService();
 
-  constructor() {
-    this.get();
-    this.post();
-  }
-
-  private get(): void {
-    this.route.get(`${this.defaultURL}`, async (req, res) => {
-      res.json({
-        message: "GET",
-      });
+  @Roles(Role.ADMIN)
+  public get(req: Request, res: Response): void {
+    res.json({
+      message: "GET",
     });
   }
 
-  private post(): void {
-    this.route.post(
-      `${this.defaultURL}`,
-      PassportController.signWithLocalStrategy
-    );
-  }
-
-  public getRouter(): Router {
-    return this.route;
+  @Public()
+  public post(req: Request, res: Response, next): void {
+    return PassportController.signWithLocalStrategy(req, res, next);
   }
 }
 
-export default new SessionController().getRouter();
+export default new SessionController();

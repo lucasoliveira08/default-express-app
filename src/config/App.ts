@@ -3,16 +3,18 @@ import bodyParser = require("body-parser");
 import cors = require("cors");
 import hpp = require("hpp");
 // import xss = require("xss-clean");
-import helmet from "helmet";
+import helmet, { originAgentCluster } from "helmet";
 import cookieParser = require("cookie-parser");
 import { Sanitize } from "../utils/functions/sanitize";
-import AuthController from "../controllers/Auth.controller";
-import SessionController from "../controllers/Session.controller";
+import rateLimit from "express-rate-limit";
 import Mongo from "./db/Mongo";
+import { AuthMiddleware } from "../utils/middlewares/auth";
+import SessionRoute from "../routes/Session.route";
+import AuthRoute from "../routes/Auth.route";
 
 class App {
   public app: express.Application;
-  private corsWhitelist: string[] = ["*"];
+  private corsWhitelist: string[] = ["http://127.0.0.1"];
 
   constructor() {
     console.log("Starting server...");
@@ -34,8 +36,8 @@ class App {
   private configRoutes(): void {
     console.log("Configuring routes...");
 
-    this.app.use(AuthController);
-    this.app.use(SessionController);
+    this.app.use(AuthRoute);
+    this.app.use(SessionRoute);
   }
 
   private configureCors(): void {
@@ -43,13 +45,7 @@ class App {
 
     this.app.use(
       cors({
-        // origin: (origin, callback) => {
-        //   if (!origin || !(this.corsWhitelist.indexOf(origin) !== -1))
-        //     return callback(new Error("Not allowed by CORS"));
-
-        //   callback(null, true);
-        // },
-        origin: "*",
+        origin: this.corsWhitelist,
         credentials: true,
         allowedHeaders: "Content-Type, Accept, Origin, Timestamp",
         preflightContinue: false,
@@ -65,6 +61,16 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json({ limit: "50mb" }));
     this.app.use(cookieParser());
+    this.app.use(
+      rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+        message:
+          "Muitas requisições para o servidor, por favor espere um pouco.",
+      })
+    );
   }
 
   private securityConfig(): void {
@@ -83,6 +89,8 @@ class App {
 
   private configureCustomMiddlewares(): void {
     console.log("Configuring middlewares...");
+
+    this.app.use(AuthMiddleware);
 
     this.app.use((req, res, next) => {
       Promise.all([

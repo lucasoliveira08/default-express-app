@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import * as bcrypt from "bcrypt";
+import { Role } from "../../utils/enums/Roles.enum";
 
 export const HASH_POWER = 14;
 
@@ -10,6 +11,7 @@ export interface IUser {
   _id: string;
   email: string;
   password: string;
+  roles: Role[];
   compareHash(hash: string): Promise<boolean>;
 }
 
@@ -22,6 +24,12 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: Role,
+    required: true,
+    default: Role.USER,
   },
 });
 
