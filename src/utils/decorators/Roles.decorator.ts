@@ -16,6 +16,7 @@ export function Roles(...roles: Role[]) {
 
       if (userRole.length === 0 || !roles.includes(userRole))
         return ErrorHandler.Unauthorized(
+          "User not authorized to access this resource - Roles Decorator",
           "Você não tem permissão suficiente para acessar este recurso.",
           request.res
         );

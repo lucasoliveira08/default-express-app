@@ -11,6 +11,7 @@ import Mongo from "./db/Mongo";
 import { AuthMiddleware } from "../utils/middlewares/auth";
 import SessionRoute from "../routes/Session.route";
 import AuthRoute from "../routes/Auth.route";
+import TEXTS from "../utils/Texts";
 
 class App {
   public app: express.Application;
@@ -67,8 +68,7 @@ class App {
         max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-        message:
-          "Muitas requisições para o servidor, por favor espere um pouco.",
+        message: TEXTS.warning.TO_MUCH_REQUESTS,
       })
     );
   }

@@ -1,4 +1,5 @@
 import * as xss from "xss";
+import ErrorHandler from "../Classes/ErrorHandler";
 
 function isValidType(type: string): boolean {
   return ["function", "symbol", "boolean", "undefined"].indexOf(type) !== -1;
@@ -20,6 +21,6 @@ export const Sanitize = (object: any): any => {
 
     return object;
   } catch (error) {
-    throw new Error("Validation failed - " + error);
+    return ErrorHandler.Unauthorized(error, "Campos inválidos");
   }
 };

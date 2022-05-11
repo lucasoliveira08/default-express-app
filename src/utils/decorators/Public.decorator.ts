@@ -15,6 +15,7 @@ export function Public(blockAuthUsers = false) {
 
       blockAuthUsers &&
         ErrorHandler.Unauthorized(
+          "User not authorized to access this resource - Public Decorator",
           "Ocorreu um erro ao verificar seu token de acesso. Faça logout ou tente novamente.",
           request.res
         );

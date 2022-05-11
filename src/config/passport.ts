@@ -2,6 +2,7 @@ import * as passport from "passport";
 import { Strategy } from "passport-local";
 import { UserMongo, UserPostgre } from "../repositories/User.repository";
 import * as bcrypt from "bcrypt";
+import TEXTS from "../utils/Texts";
 
 const userFields = {
   usernameField: "email",
@@ -45,7 +46,9 @@ passport.use(
       });
 
       if (!bcrypt.compareSync(password, user.password))
-        return done(null, false, { message: "Wrong Password" });
+        return done(TEXTS.error.WRONG_PASSWORD, false, {
+          message: TEXTS.error.WRONG_PASSWORD,
+        });
 
       return done(null, user, { message: "Logged in Successfully" });
     } catch (error) {
