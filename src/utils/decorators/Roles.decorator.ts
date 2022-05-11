@@ -15,7 +15,7 @@ export function Roles(...roles: Role[]) {
       const { role: userRole }: { role: Role } = request.user;
 
       if (userRole.length === 0 || !roles.includes(userRole))
-        return ErrorHandler.Unalthorized(
+        return ErrorHandler.Unauthorized(
           "Você não tem permissão suficiente para acessar este recurso.",
           request.res
         );

@@ -14,7 +14,7 @@ export function Public(blockAuthUsers = false) {
       if (request?.noToken) return original.apply(this, args);
 
       blockAuthUsers &&
-        ErrorHandler.Unalthorized(
+        ErrorHandler.Unauthorized(
           "Ocorreu um erro ao verificar seu token de acesso. Faça logout ou tente novamente.",
           request.res
         );
