@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
-import AuthService from "../services/Auth.service";
 import { Public } from "../utils/decorators/Public.decorator";
 import { Roles } from "../utils/decorators/Roles.decorator";
 import { Role } from "../utils/enums/Roles.enum";
 import PassportController from "./Passport.controller";
 
 class SessionController {
-  service = new AuthService();
-
   @Roles(Role.ADMIN)
   public get(req: Request, res: Response): void {
     res.json({

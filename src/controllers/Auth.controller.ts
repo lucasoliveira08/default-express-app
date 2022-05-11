@@ -3,8 +3,6 @@ import AuthService from "../services/Auth.service";
 import PassportController from "./Passport.controller";
 
 class AuthController {
-  service = new AuthService();
-
   public post(req: Request, res: Response, next): void {
     return PassportController.signup(req, res, next);
   }
