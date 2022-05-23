@@ -12,6 +12,8 @@ import { AuthMiddleware } from "../utils/middlewares/auth";
 import SessionRoute from "../routes/Session.route";
 import AuthRoute from "../routes/Auth.route";
 import TEXTS from "../utils/Texts";
+import MailRoute from "../routes/Mail.route";
+import "dotenv/config";
 
 class App {
   public app: express.Application;
@@ -39,6 +41,7 @@ class App {
 
     this.app.use(AuthRoute);
     this.app.use(SessionRoute);
+    this.app.use(MailRoute);
   }
 
   private configureCors(): void {

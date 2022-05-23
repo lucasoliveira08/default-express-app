@@ -1,12 +1,23 @@
 import Queue = require("bull");
 import QUEUE_CONFIG from "../config/queue.config";
 import QueueUtils from "./UtilsQueue";
+import * as sgMail from "@sendgrid/mail";
+import "dotenv/config";
+
+interface MailInterface {
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+}
 
 class EmailQueue extends QueueUtils {
   private queue: Queue.Queue;
 
   constructor() {
     super();
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     this.queue = new Queue("email-queue", QUEUE_CONFIG);
 
@@ -23,7 +34,14 @@ class EmailQueue extends QueueUtils {
     done: Queue.DoneCallback
   ): Promise<void> {
     try {
-      done();
+      await sgMail
+        .send({ ...job.data, from: process.env.SEND_GRID_VALID_EMAIL })
+        .then((response) => {
+          done(null, response);
+        })
+        .catch((error) => {
+          throw error;
+        });
     } catch (error) {
       job.moveToFailed({
         message: `Job failed: \n\n ${JSON.stringify(error)}`,
@@ -31,7 +49,7 @@ class EmailQueue extends QueueUtils {
     }
   }
 
-  public add(data: any, options?: Queue.JobOptions): void {
+  public add(data: MailInterface, options?: Queue.JobOptions): void {
     this.queue.add(data, { ...this.defaultOptions, ...options });
   }
 }

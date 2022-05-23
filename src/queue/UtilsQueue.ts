@@ -15,11 +15,11 @@ class QueueUtils {
     },
   };
 
-  protected failed(job: Queue.Job, error: Error): void {
+  protected failed(job: Queue.Job, error: any): void {
     LOG_JOBS && console.log("Job failed", job.data, error);
   }
 
-  protected error(job: Queue.Job, error: Error): void {
+  protected error(job: Queue.Job, error: any): void {
     LOG_JOBS && console.log("Job error", job.data, error);
   }
 

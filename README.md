@@ -13,6 +13,8 @@ REDIS_URL = "redis-xxxx.url.com:5437"
 REDIS_PASSWORD = "redis_password"
 REDIS_PORT = "5437"
 MONGO_URL = "mongodb+srv://<user>:<password>@url.net/db"
+SENDGRID_API_KEY = "YOUR SENDGRID API KEY"
+SEND_GRID_VALID_EMAIL = "validSendGridEmail@mail.com"
 NODE_ENV = "development"
 ```
 

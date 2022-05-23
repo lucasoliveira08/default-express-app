@@ -1,6 +1,7 @@
 import * as cluster from "cluster";
 import * as os from "os";
 import App from "./App";
+import "dotenv/config";
 
 const numCPUs = process.env.CPUS_TO_USE || os.cpus().length;
 console.log("NUM CPUS", numCPUs);
